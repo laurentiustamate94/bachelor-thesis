@@ -1,7 +1,11 @@
-﻿using System.Net;
+﻿using System;
+using System.Linq;
+using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web.Http;
+using Autofac;
+using BachelorThesis.Dialogs;
 using Microsoft.Bot.Builder.Dialogs;
 using Microsoft.Bot.Connector;
 
@@ -10,51 +14,53 @@ namespace BachelorThesis
     [BotAuthentication]
     public class MessagesController : ApiController
     {
+        public ILifetimeScope LifetimeScope { get; set; }
+
         /// <summary>
-        /// POST: api/Messages
-        /// Receive a message from a user and reply to it
+        /// The main entry point of the chatbot
         /// </summary>
+        /// <param name="activity">Activity from the bot context</param>
+        /// <returns>A http status code based on execution status</returns>
+        [HttpPost]
         public async Task<HttpResponseMessage> Post([FromBody]Activity activity)
         {
-            if (activity.Type == ActivityTypes.Message)
+            try
             {
-                await Conversation.SendAsync(activity, () => new Dialogs.RootDialog());
+                await this.HandleActivity(activity);
+
+                return base.Request.CreateResponse(HttpStatusCode.OK);
             }
-            else
+            catch (Exception e)
             {
-                HandleSystemMessage(activity);
+                //TODO Log this
+                return base.Request.CreateResponse(HttpStatusCode.InternalServerError);
             }
-            var response = Request.CreateResponse(HttpStatusCode.OK);
-            return response;
         }
 
-        private Activity HandleSystemMessage(Activity message)
+        /// <summary>
+        /// Handles the activity from the bot context
+        /// </summary>
+        /// <param name="activity">Activity from the bot context</param>
+        /// <returns></returns>
+        private async Task HandleActivity(Activity activity)
         {
-            if (message.Type == ActivityTypes.DeleteUserData)
+            if (activity.Type == ActivityTypes.ConversationUpdate)
             {
-                // Implement user deletion here
-                // If we handle user deletion, return a real message
+                if (activity.MembersAdded != null && activity.MembersAdded.Any())
+                {
+                    foreach (var newMember in activity.MembersAdded)
+                    {
+                        if (newMember.Id != activity.Recipient.Id)
+                        {
+                            await Conversation.SendAsync(activity, () => this.LifetimeScope.Resolve<RootDialog>());
+                        }
+                    }
+                }
             }
-            else if (message.Type == ActivityTypes.ConversationUpdate)
+            else if (activity.Type == ActivityTypes.Message)
             {
-                // Handle conversation state changes, like members being added and removed
-                // Use Activity.MembersAdded and Activity.MembersRemoved and Activity.Action for info
-                // Not available in all channels
+                await Conversation.SendAsync(activity, () => this.LifetimeScope.Resolve<RootDialog>());
             }
-            else if (message.Type == ActivityTypes.ContactRelationUpdate)
-            {
-                // Handle add/remove from contact lists
-                // Activity.From + Activity.Action represent what happened
-            }
-            else if (message.Type == ActivityTypes.Typing)
-            {
-                // Handle knowing tha the user is typing
-            }
-            else if (message.Type == ActivityTypes.Ping)
-            {
-            }
-
-            return null;
         }
     }
 }
