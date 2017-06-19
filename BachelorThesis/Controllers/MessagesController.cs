@@ -1,13 +1,16 @@
 ﻿using System;
+using System.Configuration;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web.Http;
 using Autofac;
+using BachelorThesis.Abstractions;
 using BachelorThesis.Dialogs;
 using Microsoft.Bot.Builder.Dialogs;
 using Microsoft.Bot.Connector;
+using Newtonsoft.Json;
 
 namespace BachelorThesis
 {
@@ -15,6 +18,8 @@ namespace BachelorThesis
     public class MessagesController : ApiController
     {
         public ILifetimeScope LifetimeScope { get; set; }
+
+        public ILoggingService LoggingService { get; set; }
 
         /// <summary>
         /// The main entry point of the chatbot
@@ -32,9 +37,28 @@ namespace BachelorThesis
             }
             catch (Exception e)
             {
-                //TODO Log this
+                await this.SendMessageToConversation(activity);
+
+                this.LoggingService.Log(e.GetType().ToString(), JsonConvert.SerializeObject(e));
+
                 return base.Request.CreateResponse(HttpStatusCode.InternalServerError);
             }
+        }
+
+        private async Task SendMessageToConversation(Activity activity)
+        {
+            var translatorService = this.LifetimeScope.Resolve<ITranslatorService>();
+            var serviceUrl = new Uri(activity.ServiceUrl);
+            var appCredentials = new MicrosoftAppCredentials(
+                ConfigurationManager.AppSettings["MicrosoftAppId"],
+                ConfigurationManager.AppSettings["MicrosoftAppPassword"]);
+            var connectorClient = new ConnectorClient(serviceUrl, appCredentials);
+
+            var reply = activity.CreateReply();
+            reply.Text = await translatorService
+                .TranslateToLocale(ConfigurationManager.AppSettings["GeneralErrorMessage"]);
+
+            await connectorClient.Conversations.SendToConversationAsync(reply);
         }
 
         /// <summary>
