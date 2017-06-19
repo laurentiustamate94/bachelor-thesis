@@ -8,10 +8,9 @@ namespace BachelorThesis.Helpers
     {
         private Container()
         {
-
         }
 
-        public static ILifetimeScope GetContainer()
+        private static ILifetimeScope GetContainer()
         {
             var config = GlobalConfiguration.Configuration;
             var resolver = (AutofacWebApiDependencyResolver)config.DependencyResolver;
