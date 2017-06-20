@@ -21,6 +21,8 @@ namespace BachelorThesis
 
         public ILoggingService LoggingService { get; set; }
 
+        public ITranslatorService TranslatorService { get; set; }
+
         /// <summary>
         /// The main entry point of the chatbot
         /// </summary>
@@ -37,7 +39,9 @@ namespace BachelorThesis
             }
             catch (Exception e)
             {
-                await this.SendMessageToConversation(activity);
+                await this.SendMessageToConversation(
+                    activity,
+                    ConfigurationManager.AppSettings["GeneralErrorMessage"]);
 
                 this.LoggingService.Log(e.GetType().ToString(), JsonConvert.SerializeObject(e));
 
@@ -45,9 +49,8 @@ namespace BachelorThesis
             }
         }
 
-        private async Task SendMessageToConversation(Activity activity)
+        private async Task SendMessageToConversation(Activity activity, string message)
         {
-            var translatorService = this.LifetimeScope.Resolve<ITranslatorService>();
             var serviceUrl = new Uri(activity.ServiceUrl);
             var appCredentials = new MicrosoftAppCredentials(
                 ConfigurationManager.AppSettings["MicrosoftAppId"],
@@ -55,8 +58,7 @@ namespace BachelorThesis
             var connectorClient = new ConnectorClient(serviceUrl, appCredentials);
 
             var reply = activity.CreateReply();
-            reply.Text = await translatorService
-                .TranslateToLocale(ConfigurationManager.AppSettings["GeneralErrorMessage"]);
+            reply.Text = await this.TranslatorService.TranslateToLocale(message);
 
             await connectorClient.Conversations.SendToConversationAsync(reply);
         }
@@ -74,9 +76,15 @@ namespace BachelorThesis
                 {
                     foreach (var newMember in activity.MembersAdded)
                     {
-                        if (newMember.Id != activity.Recipient.Id)
+                        if (newMember.Id.Contains(ConfigurationManager.AppSettings["BotId"]))
                         {
-                            await Conversation.SendAsync(activity, () => this.LifetimeScope.Resolve<RootDialog>());
+                            await this.SendMessageToConversation(
+                                activity,
+                                ConfigurationManager.AppSettings["RootDialog.InitialGreeting"]);
+
+                            await this.SendMessageToConversation(
+                                activity,
+                                ConfigurationManager.AppSettings["RootDialog.EmailNotification"]);
                         }
                     }
                 }

@@ -17,18 +17,7 @@ namespace BachelorThesis.Dialogs
     {
         public Task StartAsync(IDialogContext context)
         {
-            var translatorService = Container.Resolve<ITranslatorService>();
             var lifetimeScope = Container.Resolve<ILifetimeScope>();
-
-            var initialGreetingTask = Task.Run(
-                () => translatorService.TranslateToLocale(ConfigurationManager.AppSettings["RootDialog.InitialGreeting"]));
-            var emailNotificationTask = Task.Run(
-                () => translatorService.TranslateToLocale(ConfigurationManager.AppSettings["RootDialog.EmailNotification"]));
-
-            Task.WaitAll(initialGreetingTask, emailNotificationTask);
-
-            context.PostAsync(initialGreetingTask.Result);
-            context.PostAsync(emailNotificationTask.Result);
 
             context.Call(lifetimeScope.Resolve<EmailDialog>(), EmailDialogDone);
 
