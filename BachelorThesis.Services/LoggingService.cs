@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using BachelorThesis.Abstractions;
+using BachelorThesis.Abstractions.Models;
 using BachelorThesis.Database;
 using BachelorThesis.Database.Models;
 

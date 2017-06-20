@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace BachelorThesis.Abstractions
+﻿namespace BachelorThesis.Abstractions.Models
 {
     public enum LogStep
     {

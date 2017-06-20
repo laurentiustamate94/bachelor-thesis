@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using BachelorThesis.Abstractions;
+using BachelorThesis.Abstractions.Models;
 using BachelorThesis.Database;
 using BachelorThesis.Database.Models;
 using BachelorThesis.Helpers;
@@ -186,6 +187,8 @@ namespace BachelorThesis.Dialogs
                         UsersId = userId == 0 ? new long?() : userId,
                         RawText = response.Feedback
                     });
+
+                    dbContext.SaveChanges();
 
                     var translatorService = Container.Resolve<ITranslatorService>();
                     var message = await translatorService

@@ -4,6 +4,7 @@ using System.Configuration;
 using System.Linq;
 using System.Threading.Tasks;
 using BachelorThesis.Abstractions;
+using BachelorThesis.Abstractions.Models;
 using BachelorThesis.Database;
 using BachelorThesis.Helpers;
 using Microsoft.Bot.Builder.Dialogs;
