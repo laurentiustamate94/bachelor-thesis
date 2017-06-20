@@ -49,7 +49,7 @@ namespace BachelorThesis
                 .AsImplementedInterfaces()
                 .AsSelf()
                 .SingleInstance();
-            builder.RegisterInstance(new AnalysisService())
+            builder.RegisterInstance(new TextAnalyticsService())
                 .AsImplementedInterfaces()
                 .AsSelf()
                 .SingleInstance();

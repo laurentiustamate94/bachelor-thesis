@@ -37,7 +37,7 @@ namespace BachelorThesis.DatabaseUpdateTool
         private async void ElapsedEventHandler(object sender, ElapsedEventArgs e)
         {
             var qnaMakerService = new QnAMakerService();
-            var analysisService = new AnalysisService();
+            var analyticsService = new TextAnalyticsService();
 
             var remoteKnowledgeBase = await qnaMakerService.DownloadKnowledgeBase();
 
@@ -59,7 +59,7 @@ namespace BachelorThesis.DatabaseUpdateTool
                             PairChecksum = checksum,
                             Intent = item.Source,
                             Hits = 0,
-                            Analysis = string.Join(",", await analysisService.GetKeyPhrases(item.Question))
+                            Analysis = string.Join(",", await analyticsService.GetKeyPhrases(item.Question))
                         });
 
                         continue;

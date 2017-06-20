@@ -6,7 +6,7 @@
         TextTranslate,
         QnAMaker,
         Luis,
-        TextAnalysis,
+        TextAnalytics,
         CustomAnswer
     }
 }

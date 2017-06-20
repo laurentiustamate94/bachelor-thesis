@@ -67,7 +67,7 @@ namespace BachelorThesis.Services
                 case LogStep.Luis:
                     dbContext.Logging.Where(x => x.Id == logId).First().LuisJson = message;
                     break;
-                case LogStep.TextAnalysis:
+                case LogStep.TextAnalytics:
                     dbContext.Logging.Where(x => x.Id == logId).First().AnalysisJson = message;
                     break;
                 case LogStep.CustomAnswer:

@@ -51,7 +51,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AnalysisService.cs" />
+    <Compile Include="TextAnalyticsService.cs" />
     <Compile Include="AuthenticationService.cs" />
     <Compile Include="LoggingService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

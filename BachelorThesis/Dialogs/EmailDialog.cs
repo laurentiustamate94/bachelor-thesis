@@ -72,10 +72,10 @@ namespace BachelorThesis.Dialogs
                 return;
             }
 
-            var analysisService = Container.Resolve<IAnalysisService>();
-            var sentiment = await analysisService.GetSentiment(activityText);
+            var analyticsService = Container.Resolve<ITextAnalyticsService>();
+            var sentiment = await analyticsService.GetSentiment(activityText);
 
-            loggingService.Log(loggingService.GetLogIdByMessageId(activity.Id), LogStep.TextAnalysis, sentiment.ToString());
+            loggingService.Log(loggingService.GetLogIdByMessageId(activity.Id), LogStep.TextAnalytics, sentiment.ToString());
 
             if (sentiment <= Convert.ToDouble(ConfigurationManager.AppSettings["NegativeThreshold"]))
             {

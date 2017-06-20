@@ -107,12 +107,12 @@ namespace BachelorThesis.Dialogs
             {
                 var loggingService = Container.Resolve<ILoggingService>();
                 var translatorService = Container.Resolve<ITranslatorService>();
-                var analysisService = Container.Resolve<IAnalysisService>();
-                var keyPhrases = await analysisService.GetKeyPhrases(context.Activity.AsMessageActivity().Text);
+                var analyticsService = Container.Resolve<ITextAnalyticsService>();
+                var keyPhrases = await analyticsService.GetKeyPhrases(context.Activity.AsMessageActivity().Text);
 
                 loggingService.Log(
                     loggingService.GetLogIdByMessageId(context.Activity.Id),
-                    LogStep.TextAnalysis,
+                    LogStep.TextAnalytics,
                     JsonConvert.SerializeObject(keyPhrases));
 
                 var knowledgeBase = dbContext.KnowledgeBase

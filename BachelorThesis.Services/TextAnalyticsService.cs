@@ -9,13 +9,13 @@ using Newtonsoft.Json;
 
 namespace BachelorThesis.Services
 {
-    public sealed class AnalysisService : IAnalysisService
+    public sealed class TextAnalyticsService : ITextAnalyticsService
     {
         public ILoggingService LoggingService { get; set; }
 
         private readonly string baseUri = null;
 
-        public AnalysisService()
+        public TextAnalyticsService()
         {
             this.baseUri = "https://westus.api.cognitive.microsoft.com/text/analytics/v2.0/";
         }
@@ -54,7 +54,7 @@ namespace BachelorThesis.Services
             {
                 client.DefaultRequestHeaders.Add(
                     "Ocp-Apim-Subscription-Key",
-                    ConfigurationManager.AppSettings["TextAnalysisApiKey"]);
+                    ConfigurationManager.AppSettings["TextAnalyticsApiKey"]);
 
                 var request = new
                 {
@@ -86,7 +86,7 @@ namespace BachelorThesis.Services
             {
                 client.DefaultRequestHeaders.Add(
                     "Ocp-Apim-Subscription-Key",
-                    ConfigurationManager.AppSettings["TextAnalysisApiKey"]);
+                    ConfigurationManager.AppSettings["TextAnalyticsApiKey"]);
 
                 var request = new
                 {
