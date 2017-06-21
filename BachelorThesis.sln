@@ -13,6 +13,14 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BachelorThesis.Database", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BachelorThesis.DatabaseUpdateTool", "BachelorThesis.DatabaseUpdateTool\BachelorThesis.DatabaseUpdateTool.csproj", "{54CB7EB3-00F5-4628-A83F-84C86BFD8492}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SqlScripts", "SqlScripts", "{58B49AD1-94F4-4FB6-B739-62E550C75C28}"
+	ProjectSection(SolutionItems) = preProject
+		SqlScripts\dbo.Feedback.sql = SqlScripts\dbo.Feedback.sql
+		SqlScripts\dbo.KnowledgeBase.sql = SqlScripts\dbo.KnowledgeBase.sql
+		SqlScripts\dbo.Logging.sql = SqlScripts\dbo.Logging.sql
+		SqlScripts\dbo.Users.sql = SqlScripts\dbo.Users.sql
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
