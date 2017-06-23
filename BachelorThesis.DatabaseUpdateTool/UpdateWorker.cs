@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 using System.Timers;
+using BachelorThesis.Abstractions.Models;
 using BachelorThesis.Database;
 using BachelorThesis.Database.Models;
 using BachelorThesis.Services;
@@ -71,8 +73,8 @@ namespace BachelorThesis.DatabaseUpdateTool
                 }
             }
 
+            await qnaMakerService.TrainKnowledgeBase(new List<TrainingModel>());
             await qnaMakerService.PublishKnowledgeBase();
-            await qnaMakerService.TrainKnowledgeBase(null);
         }
 
         private string GetMd5Checksum(string data)
