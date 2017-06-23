@@ -15,7 +15,7 @@ namespace BachelorThesis.DatabaseUpdateTool
 
         public UpdateWorker()
         {
-            this._timer = new Timer(1000 * 60 * 10)
+            this._timer = new Timer(1000 * 60 * 60 * 12)
             {
                 AutoReset = true
             };
